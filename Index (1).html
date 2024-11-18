@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generar y Enviar PDF</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3.11.0/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>Generar PDF y Enviar</h1>
+
+  <form id="formulario">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="firma">Firma:</label><br>
+    <canvas id="canvas" width="400" height="200" style="border:1px solid #000;"></canvas><br>
+    <button type="button" id="limpiar">Limpiar Firma</button><br><br>
+
+    <button type="button" id="generar">Generar y Enviar PDF</button>
+  </form>
+
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    // Inicializar EmailJS con la clave pública
+    emailjs.init("1fTlnJ6lWrRKXSSki");
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
+
+    canvas.addEventListener("mousedown", () => isDrawing = true);
+    canvas.addEventListener("mouseup", () => isDrawing = false);
+    canvas.addEventListener("mousemove", draw);
+
+    function draw(event) {
+      if (!isDrawing) return;
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "black";
+      ctx.lineTo(event.offsetX, event.offsetY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(event.offsetX, event.offsetY);
+    }
+
+    document.getElementById("limpiar").addEventListener("click", () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    document.getElementById("generar").addEventListener("click", async () => {
+      const nombre = document.getElementById("nombre").value;
+      const correo = document.getElementById("correo").value;
+
+      // Crear un PDF con jsPDF
+      const pdf = new jsPDF();
+      pdf.text(`Nombre: ${nombre}`, 10, 10);
+      pdf.text(`Correo: ${correo}`, 10, 20);
+
+      // Añadir la firma al PDF con calidad reducida
+      const firmaURL = canvas.toDataURL("image/png", 0.5); // Reducir calidad de la firma
+      pdf.addImage(firmaURL, "PNG", 10, 30, 50, 30);
+
+      // Comprimir el PDF al exportarlo como Base64
+      const pdfBase64 = pdf.output("datauristring").split(",")[1];
+
+      // Validar tamaño del PDF en Base64
+      const base64Size = (pdfBase64.length * (3 / 4)) / 1024; // Tamaño en KB
+      if (base64Size > 50) {
+        alert("El PDF es demasiado grande para enviar directamente. Se enviará como un enlace.");
+        enviarComoEnlace(correo, pdf);
+      } else {
+        enviarComoAdjunto(correo, pdfBase64);
+      }
+    });
+
+    function enviarComoAdjunto(correo, pdfBase64) {
+      const emailParams = {
+        to_email: correo,
+        message: "Adjunto encontrarás el PDF generado.",
+        attachment: pdfBase64, // PDF codificado en Base64
+      };
+
+      emailjs.send("service_zsnah7g", "template_09hljc7", emailParams)
+        .then((response) => {
+          alert("Correo enviado exitosamente.");
+          console.log("Respuesta del servidor:", response);
+        })
+        .catch((error) => {
+          console.error("Error al enviar el correo:", error);
+          alert("Error al enviar el correo: " + JSON.stringify(error));
+        });
+    }
+
+    async function enviarComoEnlace(correo, pdf) {
+      // Convertir PDF a Blob para subirlo
+      const pdfBlob = new Blob([pdf.output("blob")], { type: "application/pdf" });
+
+      // Subir el archivo a un servicio de almacenamiento (ejemplo: Google Drive o Amazon S3)
+      const url = await subirArchivo(pdfBlob); // Aquí implementas la lógica de subida
+      if (url) {
+        const emailParams = {
+          to_email: correo,
+          message: `Puedes descargar tu PDF desde el siguiente enlace: ${url}`,
+        };
+
+        emailjs.send("service_zsnah7g", "template_09hljc7", emailParams)
+          .then((response) => {
+            alert("Correo enviado exitosamente con el enlace al PDF.");
+            console.log("Respuesta del servidor:", response);
+          })
+          .catch((error) => {
+            console.error("Error al enviar el correo con enlace:", error);
+            alert("Error al enviar el correo con enlace: " + JSON.stringify(error));
+          });
+      } else {
+        alert("Error al subir el archivo para compartir el enlace.");
+      }
+    }
+
+    async function subirArchivo(pdfBlob) {
+      // Implementar la subida del archivo a un servicio de almacenamiento
+      // Aquí puedes usar Google Drive, Amazon S3, o cualquier API de almacenamiento.
+      // Retorna la URL del archivo subido.
+      console.log("Subida de archivo no implementada.");
+      return null; // Cambia esto al implementar tu lógica de subida
+    }
+  </script>
+</body>
+</html>
