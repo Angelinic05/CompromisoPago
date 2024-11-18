@@ -1,34 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Compromiso de Pago</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Compromiso de Pago</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage-compat.js"></script>
+
+
+
 </head>
+
 <body>
-    <div class="container">
-        <h1>Formulario de Compromiso de Pago</h1>
-        <form id="payment-form">
-            <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" required><br>
+  <div class="container">
+    <h1>Formulario de Compromiso de Pago</h1>
+    <form id="payment-form">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" name="name" required><br>
 
-            <label for="user_id">ID:</label>
-            <input type="text" id="user_id" name="user_id" required><br>
+      <label for="user_id">ID:</label>
+      <input type="text" id="user_id" name="user_id" required><br>
 
-            <label for="address">Dirección:</label>
-            <input type="text" id="address" name="address" required><br>
+      <label for="address">Dirección:</label>
+      <input type="text" id="address" name="address" required><br>
 
-            <label>Firma:</label>
-            <canvas id="signature-pad" width="400" height="100" style="border: 1px solid black;"></canvas>
-            <button type="button" id="clear-signature">Limpiar Firma</button><br>
+      <label>Firma:</label>
+      <canvas id="signature-pad" width="400" height="100" style="border: 1px solid black;"></canvas>
+      <button type="button" id="clear-signature">Limpiar Firma</button><br>
 
-            <button type="button" id="generate-pdf">Generar PDF</button>
-        </form>
-    </div>
+      <button type="button" id="generate-pdf">Generar PDF</button>
+      <button type="button" id="send-email">Enviar por Correo</button>
 
-    <script src="script.js"></script>
+    </form>
+  </div>
+
+  <!-- Incluye el script al final -->
+  <script src="script.js"></script>
 </body>
+
 </html>
