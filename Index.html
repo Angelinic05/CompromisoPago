@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario con PDF</title>
+    <title>Formulario con Firma</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            max-width: 600px;
         }
+
         canvas {
             border: 1px solid black;
         }
+
         form {
-            max-width: 400px;
+            margin-top: 20px;
         }
+
         label {
             font-weight: bold;
         }
+
         button {
             margin-top: 10px;
             padding: 10px 20px;
@@ -26,11 +32,13 @@
             border: none;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
+
 <body>
     <h1>Formulario con Firma</h1>
     <form id="userForm">
@@ -50,15 +58,15 @@
         <canvas id="signaturePad" width="300" height="100"></canvas><br>
         <button type="button" id="clearSignature">Limpiar Firma</button><br><br>
 
-        <button type="button" id="submit">Enviar Formulario</button>
+        <button type="submit">Enviar Formulario</button>
     </form>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         const canvas = document.getElementById('signaturePad');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
+        // Inicializar Canvas para la firma
         canvas.addEventListener('mousedown', () => { isDrawing = true; });
         canvas.addEventListener('mouseup', () => { isDrawing = false; ctx.beginPath(); });
         canvas.addEventListener('mousemove', draw);
@@ -78,7 +86,11 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         });
 
-        document.getElementById('submit').addEventListener('click', async () => {
+        // Manejar el envío del formulario
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Capturar los datos del formulario
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const address = document.getElementById('address').value;
@@ -90,40 +102,36 @@
                 return;
             }
 
-            // Crear PDF con jsPDF
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.text(`Nombre: ${name}`, 10, 10);
-            pdf.text(`Correo: ${email}`, 10, 20);
-            pdf.text(`Dirección: ${address}`, 10, 30);
-            pdf.text(`Identificación: ${idNumber}`, 10, 40);
+            // URL de tu Web App de Google Apps Script
+            const SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxHrG6pXWN0wVA0o3X3Z3foBkMDqfQj9nzDeyIshjVusgVDJva7JXmhwpU2z9dorgLoaQ/exec'; // Reemplaza con tu URL
 
-            const img = new Image();
-            img.src = signature;
-            img.onload = async () => {
-                pdf.addImage(img, 'PNG', 10, 50, 100, 50);
-
-                const pdfBase64 = btoa(
-                    String.fromCharCode(...new Uint8Array(await pdf.output('arraybuffer')))
-                );
-
-                // Enviar el PDF al backend
-                const response = await fetch('send_email.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({
-                        email: email,
-                        pdf: `data:application/pdf;base64,${pdfBase64}`
-                    })
+            try {
+                const response = await fetch(SHEETS_WEB_APP_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        address,
+                        idNumber,
+                        signature
+                    }),
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    mode: "no-cors" // Permitir solicitudes sin verificación de CORS
                 });
 
                 if (response.ok) {
-                    alert('Formulario enviado con éxito.');
+                    alert("Formulario enviado con éxito.");
                 } else {
-                    alert('Error al enviar el formulario.');
+                    alert("Error al enviar el formulario.");
                 }
-            };
+            } catch (error) {
+                console.error("Error al enviar el formulario:", error);
+                alert("Hubo un error al enviar el formulario.");
+            }
         });
     </script>
 </body>
+
 </html>
