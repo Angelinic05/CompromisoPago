@@ -1,137 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario con Firma</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            max-width: 600px;
-        }
-
-        canvas {
-            border: 1px solid black;
-        }
-
-        form {
-            margin-top: 20px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enviar PDF por Email</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    /* Estilos básicos */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
-
 <body>
-    <h1>Formulario con Firma</h1>
-    <form id="userForm">
-        <label for="name">Nombre:</label><br>
-        <input type="text" id="name" required><br><br>
+  <form id="pdfForm">
+    <h2>Formulario</h2>
+    <input type="text" id="name" placeholder="Nombre" required>
+    <input type="email" id="email" placeholder="Correo" required>
+    <input type="text" id="address" placeholder="Dirección" required>
+    <input type="text" id="idNumber" placeholder="Identificación" required>
+    <label>Firma:</label>
+    <canvas id="signatureCanvas" width="300" height="150"></canvas>
+    <button type="button" id="clearSignature">Limpiar Firma</button>
+    <button type="submit">Generar y Enviar PDF</button>
+  </form>
 
-        <label for="email">Correo:</label><br>
-        <input type="email" id="email" required><br><br>
+  <script>
+    // Inicializar EmailJS
+    emailjs.init("BguTToQAEmVYZovaF"); // Reemplaza con tu user_id
 
-        <label for="address">Dirección:</label><br>
-        <input type="text" id="address" required><br><br>
+    document.addEventListener("DOMContentLoaded", () => {
+      const { jsPDF } = window.jspdf; // Inicializar jsPDF desde el CDN
 
-        <label for="idNumber">Identificación:</label><br>
-        <input type="text" id="idNumber" required><br><br>
+      const form = document.getElementById('pdfForm');
+      const canvas = document.getElementById('signatureCanvas');
+      const ctx = canvas.getContext('2d');
+      const clearSignatureBtn = document.getElementById('clearSignature');
+      let drawing = false;
 
-        <label>Firma:</label><br>
-        <canvas id="signaturePad" width="300" height="100"></canvas><br>
-        <button type="button" id="clearSignature">Limpiar Firma</button><br><br>
+      // Habilitar dibujo en el canvas para la firma
+      canvas.addEventListener('mousedown', () => { drawing = true; });
+      canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+      canvas.addEventListener('mousemove', (event) => {
+        if (!drawing) return;
+        const rect = canvas.getBoundingClientRect();
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
+        ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+      });
 
-        <button type="submit">Enviar Formulario</button>
-    </form>
+      // Botón para limpiar la firma
+      clearSignatureBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
 
-    <script>
-        const canvas = document.getElementById('signaturePad');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
+      // Manejar el envío del formulario
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-        // Inicializar Canvas para la firma
-        canvas.addEventListener('mousedown', () => { isDrawing = true; });
-        canvas.addEventListener('mouseup', () => { isDrawing = false; ctx.beginPath(); });
-        canvas.addEventListener('mousemove', draw);
+        // Capturar los valores del formulario
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const address = document.getElementById('address').value;
+        const idNumber = document.getElementById('idNumber').value;
 
-        function draw(event) {
-            if (!isDrawing) return;
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = 'black';
-            ctx.lineTo(event.offsetX, event.offsetY);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(event.offsetX, event.offsetY);
-        }
+        // Crear un PDF
+        const pdf = new jsPDF();
 
-        document.getElementById('clearSignature').addEventListener('click', () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Añadir información al PDF
+        pdf.setFontSize(12);
+        pdf.text(`Nombre: ${name}`, 10, 20);
+        pdf.text(`Correo: ${email}`, 10, 30);
+        pdf.text(`Dirección: ${address}`, 10, 40);
+        pdf.text(`Identificación: ${idNumber}`, 10, 50);
+
+        // Añadir la firma al PDF
+        const signatureImage = canvas.toDataURL("image/png");
+        pdf.addImage(signatureImage, "PNG", 10, 60, 100, 50);
+
+        // Convertir PDF a Base64
+        const pdfData = pdf.output("datauristring");
+
+        // Enviar por EmailJS
+        emailjs.send("service_rxs2p45", "template_m8gx2yw", {
+          to_email: email, // Correo del destinatario
+          message: "Aquí tienes tu PDF generado desde el formulario.",
+          pdf: pdfData, // PDF en formato base64
+        }).then((response) => {
+          alert("Correo enviado correctamente.");
+        }).catch((error) => {
+          console.error("Error al enviar el correo:", error);
+          alert("Hubo un error al enviar el correo.");
         });
-
-        // Manejar el envío del formulario
-        document.getElementById('userForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Capturar los datos del formulario
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const address = document.getElementById('address').value;
-            const idNumber = document.getElementById('idNumber').value;
-            const signature = canvas.toDataURL(); // Firma en Base64
-
-            if (!name || !email || !address || !idNumber) {
-                alert("Todos los campos son obligatorios.");
-                return;
-            }
-
-            // URL de tu Web App de Google Apps Script
-            const SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxHrG6pXWN0wVA0o3X3Z3foBkMDqfQj9nzDeyIshjVusgVDJva7JXmhwpU2z9dorgLoaQ/exec'; // Reemplaza con tu URL
-
-            try {
-                const response = await fetch(SHEETS_WEB_APP_URL, {
-                    method: "POST",
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        address,
-                        idNumber,
-                        signature
-                    }),
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    mode: "no-cors" // Permitir solicitudes sin verificación de CORS
-                });
-
-                if (response.ok) {
-                    alert("Formulario enviado con éxito.");
-                } else {
-                    alert("Error al enviar el formulario.");
-                }
-            } catch (error) {
-                console.error("Error al enviar el formulario:", error);
-                alert("Hubo un error al enviar el formulario.");
-            }
-        });
-    </script>
+      });
+    });
+  </script>
 </body>
-
 </html>
