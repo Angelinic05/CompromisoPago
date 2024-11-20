@@ -19,6 +19,24 @@
         <input type="email" id="email" placeholder="Correo" required>
         <input type="text" id="address" placeholder="Dirección" required>
         <input type="text" id="idNumber" placeholder="Identificación" required>
+        <div class="form-group">
+            <label for="country"></label>
+            <select id="country" name="country" required  placeholder="Pais">
+                <option value="USA">Estados Unidos</option>
+                <option value="Spain">España</option>
+                <option value="Mexico">México</option>
+                <option value="Colombia">Colombia</option>
+                <option value="UK">Reino Unido</option>
+                <option value="India">India</option>
+                <option value="Japan">Japón</option>
+                <!-- Agrega más países según necesidad -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="phone"></label>
+            <input type="tel" id="phone" name="phone" placeholder="Numero de Celular" required>
+        </div>
+        
         <label>Firma:</label>
         <canvas id="signatureCanvas" width="300" height="150"></canvas>
         <button type="button" id="clearSignature">Limpiar Firma</button>

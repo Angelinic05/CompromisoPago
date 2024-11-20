@@ -82,6 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById('email').value;
         const address = document.getElementById('address').value;
         const idNumber = document.getElementById('idNumber').value;
+        const country = document.getElementById('country').value;
+        const phoneNumber = document.getElementById('phone').value;
+
 
         // Crear PDF
         const pdf = new jsPDF();
@@ -95,6 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
             pdf.text(` ${email}`, 43.5, 257);
             pdf.text(` ${address}`, 67.5, 69);
             pdf.text(` ${idNumber}`, 27, 74);
+            pdf.text(` ${country}`, 50, 25);
+            pdf.text(` ${phoneNumber}`, 75, 100);
 
             const signatureImage = canvas.toDataURL('image/jpeg', 0.5);
             pdf.addImage(signatureImage, 'PNG', 25, 214, 50, 20);
