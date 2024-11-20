@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearSignatureBtn = document.getElementById('clearSignature');
     let drawing = false;
 
-    // Habilitar dibujo para dispositivos de escritorio
+    // Funciones para manejar el dibujo
     const startDrawing = (event) => {
         drawing = true;
         draw(event);
@@ -27,20 +27,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const draw = (event) => {
         if (!drawing) return;
+
         const rect = canvas.getBoundingClientRect();
+        const x = event.type.includes("touch")
+            ? event.touches[0].clientX - rect.left
+            : event.clientX - rect.left;
+        const y = event.type.includes("touch")
+            ? event.touches[0].clientY - rect.top
+            : event.clientY - rect.top;
+
         ctx.lineWidth = 2;
         ctx.lineCap = 'round';
         ctx.strokeStyle = '#000';
-
-        let x, y;
-        if (event.type.includes("touch")) {
-            const touch = event.touches[0];
-            x = touch.clientX - rect.left;
-            y = touch.clientY - rect.top;
-        } else {
-            x = event.clientX - rect.left;
-            y = event.clientY - rect.top;
-        }
 
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -48,24 +46,35 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.moveTo(x, y);
     };
 
+    // Eventos del canvas (Mouse y Táctil)
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', endDrawing);
     canvas.addEventListener('mouseout', endDrawing);
 
-    // Habilitar dibujo para dispositivos táctiles
-    canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', endDrawing);
+    canvas.addEventListener('touchstart', (event) => {
+        event.preventDefault(); // Evita que la pantalla se mueva
+        startDrawing(event);
+    });
 
-    // Limpiar la firma
+    canvas.addEventListener('touchmove', (event) => {
+        event.preventDefault(); // Evita que la pantalla se mueva
+        draw(event);
+    });
+
+    canvas.addEventListener('touchend', (event) => {
+        event.preventDefault(); // Evita que la pantalla se mueva
+        endDrawing(event);
+    });
+
+    // Limpiar firma
     clearSignatureBtn.addEventListener('click', () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     });
 
-    // Manejar el envío del formulario
+    // Manejo del formulario
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -74,27 +83,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const address = document.getElementById('address').value;
         const idNumber = document.getElementById('idNumber').value;
 
-        // Crear PDF con Imagen de Fondo
+        // Crear PDF
         const pdf = new jsPDF();
         const img = new Image();
         img.src = 'CP5C.png';
 
         img.onload = async () => {
-            pdf.addImage(img, 'PNG', 0, 0, 210, 297); // Añadir imagen de fondo
+            pdf.addImage(img, 'PNG', 0, 0, 210, 297);
             pdf.setFontSize(12);
             pdf.text(` ${name}`, 76, 63.5);
             pdf.text(` ${email}`, 43.5, 257);
             pdf.text(` ${address}`, 67.5, 69);
             pdf.text(` ${idNumber}`, 27, 74);
 
-            // Añadir firma al PDF
             const signatureImage = canvas.toDataURL('image/jpeg', 0.5);
             pdf.addImage(signatureImage, 'PNG', 25, 214, 50, 20);
 
-            // Convertir PDF a base64
             const pdfBase64 = pdf.output('datauristring').split(',')[1];
 
-            // Configurar datos para enviar a EmailJS
             const payload = {
                 service_id: "service_rxs2p45",
                 template_id: "template_m8gx2yw",
