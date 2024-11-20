@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario con PDF y EmailJS</title>
+    <title>Compromiso de Pago</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -12,7 +12,9 @@
 
 <body>
     <form id="pdfForm">
-        <h2>Formulario</h2>
+        <h2>Compromiso de Pago The Perfect Launch
+        </h2>
+        <h6>Recuerda que para poder tener acceso al programa debes firmar el compromiso de pago, en donde te comprometes a pagar todas las cuotas que se acordaron para el entrenamiento</h6>
         <input type="text" id="name" placeholder="Nombre" required>
         <input type="email" id="email" placeholder="Correo" required>
         <input type="text" id="address" placeholder="Dirección" required>
@@ -20,6 +22,7 @@
         <label>Firma:</label>
         <canvas id="signatureCanvas" width="300" height="150"></canvas>
         <button type="button" id="clearSignature">Limpiar Firma</button>
+        <br><br>
         <button type="submit">Generar y Enviar PDF</button>
     </form>
     <script src="script.js"></script>

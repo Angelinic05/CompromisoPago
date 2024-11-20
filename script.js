@@ -82,10 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
         img.onload = async () => {
             pdf.addImage(img, 'PNG', 0, 0, 210, 297); // Añadir imagen de fondo
             pdf.setFontSize(12);
-            pdf.text(` ${name}`, 75, 62);
-            pdf.text(` ${email}`, 10, 240);
-            pdf.text(` ${address}`, 69, 69);
-            pdf.text(` ${idNumber}`, 25, 73);
+            pdf.text(` ${name}`, 76, 63.5);
+            pdf.text(` ${email}`, 43.5, 257);
+            pdf.text(` ${address}`, 67.5, 69);
+            pdf.text(` ${idNumber}`, 27, 74);
 
             // Añadir firma al PDF
             const signatureImage = canvas.toDataURL('image/jpeg', 0.5);
