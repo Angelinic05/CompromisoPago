@@ -7,9 +7,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('signatureCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Pintar el fondo del canvas blanco
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Función para ajustar el tamaño del canvas
+    const resizeCanvas = () => {
+        canvas.width = canvas.clientWidth; // Ancho en píxeles
+        canvas.height = canvas.clientHeight; // Altura en píxeles
+
+        // Pintar el fondo del canvas blanco
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+
+    // Ajustar el tamaño del canvas al cargar la página
+    resizeCanvas();
+
+    // Ajustar el tamaño del canvas al redimensionar la ventana
+    window.addEventListener('resize', resizeCanvas);
 
     const clearSignatureBtn = document.getElementById('clearSignature');
     let drawing = false;
@@ -85,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const country = document.getElementById('country').value;
         const phoneNumber = document.getElementById('phone').value;
 
+        // Obtener la fecha actual
+        const today = new Date();
+        const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
 
         // Crear PDF
         const pdf = new jsPDF();
@@ -92,14 +107,15 @@ document.addEventListener("DOMContentLoaded", () => {
         img.src = 'CP5C.png';
 
         img.onload = async () => {
-            pdf.addImage(img, 'PNG', 0, 0, 210, 297);
+            pdf.addImage(img, 'PNG',  0, 0, 210, 297);
             pdf.setFontSize(12);
             pdf.text(` ${name}`, 76, 63.5);
             pdf.text(` ${email}`, 43.5, 257);
             pdf.text(` ${address}`, 67.5, 69);
-            pdf.text(` ${idNumber}`, 27, 74);
+            pdf.text(` ${idNumber}`, 29, 74);
             pdf.text(` ${country}`, 50, 25);
-            pdf.text(` ${phoneNumber}`, 75, 100);
+            pdf.text(` ${phoneNumber}`, 37, 250);
+            pdf.text(` ${formattedDate}`, 145, 47); // Agregar la fecha al PDF
 
             const signatureImage = canvas.toDataURL('image/jpeg', 0.5);
             pdf.addImage(signatureImage, 'PNG', 25, 214, 50, 20);

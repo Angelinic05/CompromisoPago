@@ -1,3 +1,4 @@
+
 /* Reset general */
 * {
     margin: 0;
@@ -7,97 +8,184 @@
 
 /* Cuerpo */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Altura mínima del viewport */
-    background-color: #f4f4f9;
+    min-height: 100vh;
+    background-color: #363636;
+    /* background: linear-gradient(180deg, #47008d, #000000);  */
+    color: #fff;
 }
 
 /* Contenedor del formulario */
 form {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px; /* Ancho máximo en pantallas grandes */
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.801);
+    width: 50%;
+    max-width: 2200px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 15px; /* Espacio entre los elementos */
+    gap: 20px;
+    animation: fadeIn 1.2s ease-in-out; /* Animación de entrada */
 }
 
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Títulos */
+h2 {
+    text-align: center;
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+h6 {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #8a8a8a;
+    margin-bottom: 20px;
+}
+
+.label-name-email{
+    display: flex;
+    gap: 30px;
+}
 /* Estilo de los campos de entrada */
 input,
-textarea {
+select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #e2e2e2;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Efecto al enfocar los campos */
+input:focus,
+select:focus {
+    border-color: #7F00FF;
+    box-shadow: 0 0 10px rgba(127, 0, 255, 0.5);
 }
 
 /* Estilo del canvas */
+#signatureContainer {
+    width: 100%; /* El contenedor ocupa el 100% del ancho */
+    height: 20vh; /* Ajusta la altura a 20 caracteres */
+    display: flex; /* Para centrar el canvas si es necesario */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+}
+
 canvas {
-    border: 1px dashed #ccc;
-    width: 100%;
-    height: 120px;
-    border-radius: 5px;
+    border: 2px dashed #ccc;
+    width: 100%; /* El canvas ocupa el 100% del ancho del contenedor */
+    height: 100%; /* El canvas ocupa el 100% de la altura del contenedor */
+    border-radius: 8px;
+    touch-action: none; /* Evita el comportamiento predeterminado de desplazamiento en dispositivos táctiles */
+}
+
+.actions{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 /* Botones */
 button {
-    background: #007bff;
+    background-color: #7F00FF;
     color: white;
-    border: none;
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.3rem;;
     cursor: pointer;
-    font-size: 16px;
-    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background: #0056b3;
+    background-color: #6600cc;
+}
+
+
+/* Botón para limpiar la firma */
+#clearSignature {
+    background-color: #8a8a8a;
+    /* margin-bottom: 20px; */
+}
+
+#clearSignature:hover {
+    background-color: #5c5c5c;
+}
+
+label{
+    font-size: 1.3rem;
+    color: #8a8a8a;
+    font-weight: bold;
 }
 
 /* Modo pantalla completa solo en dispositivos móviles */
-@media (max-width: 768px) {
-    body {
-        justify-content: flex-start; /* Alinea todo arriba */
-        align-items: flex-start;
-        padding: 0; /* Sin margen */
+@media (max-width: 1200px) {
+    h2 {
+        font-size: 2rem;
+    }
+    
+    h6 {
+        font-size: 1rem;
     }
 
+    input, select {
+    font-size: 0.8rem;
+    }
+
+    button {
+        font-size: 0.8rem;;
+    }
+
+
+    
+}
+
+
+@media (max-width: 500px) {
     form {
-        width: 100%;
-        height: 100vh; /* Ocupa toda la altura del viewport */
-        border-radius: 0; /* Sin bordes redondeados */
-        box-shadow: none; /* Sin sombra */
+        width: 70%;
+        gap: 0;
     }
-}
 
-/* Campo del selector de país */
-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
+    h2 {
+        font-size: 1rem;
+    }
+    
+    h6 {
+        font-size: 0.7rem;
+    }
 
-/* Campo de entrada del teléfono */
-input[type="tel"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 15px;
+    .label-name-email{
+        display: flex;
+        gap: 5px;
+    }
+
+    input, select {
+    font-size: 0.6rem;
+
+    }
+
+
 }

@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,16 +15,19 @@
 
 <body>
     <form id="pdfForm">
-        <h2>Compromiso de Pago The Perfect Launch
-        </h2>
+        <h2>Compromiso de Pago The Perfect Launch</h2>
         <h6>Recuerda que para poder tener acceso al programa debes firmar el compromiso de pago, en donde te comprometes a pagar todas las cuotas que se acordaron para el entrenamiento</h6>
-        <input type="text" id="name" placeholder="Nombre" required>
-        <input type="email" id="email" placeholder="Correo" required>
-        <input type="text" id="address" placeholder="Dirección" required>
-        <input type="text" id="idNumber" placeholder="Identificación" required>
+        <div class="label-name-email">
+            <input type="text" id="name" placeholder="Nombre" required>
+            <input type="email" id="email" placeholder="Correo" required>
+        </div>
+        <div class="label-name-email">
+            <input type="text" id="address" placeholder="Dirección" required>
+            <input type="text" id="idNumber" placeholder="Identificación" required>
+        </div>
         <div class="form-group">
             <label for="country"></label>
-            <select id="country" name="country" required  placeholder="Pais">
+            <select id="country" name="country" required placeholder="Pais">
                 <option value="USA">Estados Unidos</option>
                 <option value="Spain">España</option>
                 <option value="Mexico">México</option>
@@ -29,7 +35,6 @@
                 <option value="UK">Reino Unido</option>
                 <option value="India">India</option>
                 <option value="Japan">Japón</option>
-                <!-- Agrega más países según necesidad -->
             </select>
         </div>
         <div class="form-group">
@@ -38,9 +43,14 @@
         </div>
         
         <label>Firma:</label>
-        <canvas id="signatureCanvas" width="300" height="150"></canvas>
-        <button type="button" id="clearSignature">Limpiar Firma</button>
-        <button type="submit">Generar y Enviar PDF</button>
+        <div id="signatureContainer" >
+            <canvas id="signatureCanvas"></canvas>
+        </div>
+        <div class="actions">
+            <button type="button" id="clearSignature">Limpiar Firma</button>
+            <button type="submit">Generar y Enviar PDF</button>
+        </div>
+        
     </form>
     <script src="script.js"></script>
 </body>
