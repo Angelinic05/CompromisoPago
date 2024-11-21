@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +12,7 @@
 
 <body>
     <form id="pdfForm">
-        <h2>Compromiso de Pago The Perfect Launch</h2>
+        <h2>COMPROMISO DE PAGO</h2>
         <h6>Recuerda que para poder tener acceso al programa debes firmar el compromiso de pago, en donde te comprometes a pagar todas las cuotas que se acordaron para el entrenamiento</h6>
         <div class="label-name-email">
             <input type="text" id="name" placeholder="Nombre" required>
@@ -47,12 +44,26 @@
             <canvas id="signatureCanvas"></canvas>
         </div>
         <div class="actions">
-            <button type="button" id="clearSignature">Limpiar Firma</button>
-            <button type="submit">Generar y Enviar PDF</button>
+            <button type="button" id="clearSignature">LIMPIAR FIRMA</button>
+            <!-- <button type="submit">Generar y Enviar PDF</button> -->
+            <button type="submit" aria-label='Enviado' class='h-button centered' data-text='Enviar PDF'>
+                <span>E</span>
+                <span>N</span>
+                <span>V</span>
+                <span>I</span>
+                <span>A</span>
+                <span>D</span>
+                <span>O</span>
+            </button>
         </div>
         
     </form>
     <script src="script.js"></script>
+    <script>
+        document.querySelector('.h-button').addEventListener('click', function() {
+        this.setAttribute('data-text', 'Enviado');
+    });
+    </script>
 </body>
 
 </html>

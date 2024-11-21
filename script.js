@@ -131,13 +131,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 img2.onload = async () => {
                     pdf2.addImage(img2, 'PNG', 0, 0, 210, 297);
                     pdf2.setFontSize(12);
-                    pdf2.text(` ${name}`, 76, 63.5);
-                    pdf2.text(` ${email}`, 43.5, 257);
-                    pdf2.text(` ${address}`, 67.5, 69);
-                    pdf2.text(` ${idNumber}`, 29, 74);
-                    pdf2.text(` ${country}`, 50, 25);
-                    pdf2.text(` ${phoneNumber}`, 37, 250);
-                    pdf2.text(` ${formattedDate}`, 145, 47);
+                    // pdf2.text(` ${name}`, 76, 63.5);
+                    // pdf2.text(` ${email}`, 43.5, 257);
+                    // pdf2.text(` ${address}`, 67.5, 69);
+                    pdf2.text(` ${idNumber}`, 30, 260);
+                    // pdf2.text(` ${country}`, 50, 25);
+                    // pdf2.text(` ${phoneNumber}`, 37, 250);
+                    pdf2.text(` ${formattedDate}`, 40, 74);
 
                     const signatureImage = canvas.toDataURL('image/jpeg', 0.5);
                     pdf.addImage(signatureImage, 'PNG', 25, 214, 50, 20);

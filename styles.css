@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
 
 /* Reset general */
 * {
@@ -8,15 +9,13 @@
 
 /* Cuerpo */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f4f8;
+    font-family: 'Montserrat', Arial, sans-serif;
+    background-color: #000000;
+    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #363636;
-    /* background: linear-gradient(180deg, #47008d, #000000);  */
-    color: #fff;
 }
 
 /* Contenedor del formulario */
@@ -24,14 +23,13 @@ form {
     background: #ffffff;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.801);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     width: 50%;
     max-width: 1600px;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    animation: fadeIn 1.2s ease-in-out; /* Animación de entrada */
+    animation: fadeIn 1.2s ease-in-out;
 }
 
 /* Animación de entrada */
@@ -52,6 +50,7 @@ h2 {
     font-size: 3rem;
     color: #333;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 h6 {
@@ -61,11 +60,12 @@ h6 {
     margin-bottom: 20px;
 }
 
-.label-name-email{
+/* Campos de entrada y etiquetas */
+.label-name-email {
     display: flex;
     gap: 30px;
 }
-/* Estilo de los campos de entrada */
+
 input,
 select {
     width: 100%;
@@ -74,121 +74,231 @@ select {
     border: 2px solid #e2e2e2;
     font-size: 1.3rem;
     margin-bottom: 15px;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Efecto al enfocar los campos */
-input:focus,
+/* input:focus,
 select:focus {
     border-color: #7F00FF;
     box-shadow: 0 0 10px rgba(127, 0, 255, 0.5);
-}
+} */
 
-/* Estilo del canvas */
-#signatureContainer {
-    width: 100%; /* El contenedor ocupa el 100% del ancho */
-    height: 20vh; /* Ajusta la altura a 20 caracteres */
-    display: flex; /* Para centrar el canvas si es necesario */
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-}
-
-canvas {
-    border: 2px dashed #ccc;
-    width: 100%; /* El canvas ocupa el 100% del ancho del contenedor */
-    height: 100%; /* El canvas ocupa el 100% de la altura del contenedor */
-    border-radius: 8px;
-    touch-action: none; /* Evita el comportamiento predeterminado de desplazamiento en dispositivos táctiles */
-}
-
-.actions{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
-/* Botones */
-button {
-    border: 3px solid #340068;
-    background-color: #7F00FF;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 1.3rem;;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #6600cc;
-}
-
-
-/* Botón para limpiar la firma */
-#clearSignature {
-    background-color: #8a8a8a;
-    /* margin-bottom: 20px; */
-}
-
-#clearSignature:hover {
-    background-color: #5c5c5c;
-}
-
-label{
+label {
     font-size: 1.3rem;
     color: #8a8a8a;
     font-weight: bold;
 }
 
-/* Modo pantalla completa solo en dispositivos móviles */
-@media (max-width: 1200px) {
-    h2 {
-        font-size: 2rem;
-    }
-    
-    h6 {
-        font-size: 1rem;
-    }
+/* Firma */
+#signatureContainer {
+    width: 100%;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    input, select {
-    font-size: 0.8rem;
-    }
-
-    button {
-        font-size: 0.8rem;;
-    }
-  
+canvas {
+    border: 2px dashed #ccc;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    touch-action: none;
 }
 
 
-@media (max-width: 500px) {
+
+
+/* Botones */
+button {
+    width: auto;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Botón con efecto de salto al hacer clic */
+button:active {
+    animation: bounce-click 0.3s;
+}
+
+
+/* Animación de rebote */
+@keyframes bounce-click {
+    0%, 100% {
+        transform: scale(1); /* Tamaño original */
+    }
+    50% {
+        transform: scale(0.95); /* Rebote hacia abajo */
+    }
+}
+
+/* Estilo específico para h-button */
+.h-button {
+    position: relative;
+    background: #0da508;
+    padding: 20px;
+    text-align: center;
+    border: none;
+}
+
+.h-button span {
+    display: inline-block;
+    text-transform: uppercase;
+    transition: opacity 0.25s cubic-bezier(0.5, -1, 0.5, 2),
+        transform 0.25s cubic-bezier(0.5, -1, 0.5, 2);
+    opacity: 0;
+    transform: translate(0, -20px);
+}
+
+.h-button:before {
+    content: attr(data-text);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+.h-button:active:before {
+    content: 'Enviado';
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+.h-button:active span {
+    opacity: 0;
+    transform: translate(0, 20px);
+}
+
+.h-button:hover {
+    background: #0a8606;
+}
+
+/* Estilo para el botón LIMPIAR FIRMA */
+#clearSignature {
+    background-color: #8a8a8a;
+    letter-spacing: 2.5px;
+}
+
+#clearSignature:hover {
+    background-color: #6d6d6d;
+}
+
+/* Acciones */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 1200px) {
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h6 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
     form {
         width: 70%;
+        max-width: 900px;
+        gap: 5px;
+    }
+    
+
+    input, select {
+        font-size: 0.9rem; /* Más legible en pantallas medianas */
+    }
+
+    button {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 800px) {
+
+    form {
+        width: 70%;
+        max-width: 600px;
+        gap: 2px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h6 {
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-size: 1.1rem;
+    }
+
+
+
+}
+
+@media (max-width: 500px) {
+
+    form {
+        width: 80%;
+        max-width: 400px;
         gap: 0;
     }
 
     h2 {
         font-size: 1rem;
     }
-    
+
     h6 {
         font-size: 0.7rem;
+        margin-bottom: 10px;
     }
 
-    .label-name-email{
-        display: flex;
-        gap: 5px;
+    /* .actions {
+        flex-direction: column;
+        gap: 15px; 
+    }  */
+
+
+    .label-name-email {
+        flex-direction: column; /* Cambiar a diseño vertical en pantallas muy pequeñas */
+        gap: 2px;
     }
 
-    input, select {
-    font-size: 0.6rem;
-
-    }
-
-    button {
-        margin-top: 10px;
-        padding: 9px;
+    input,
+    select {
+        padding: 10px;
         font-size: 0.7rem;
+        margin-bottom: 5px;
     }
 
+    label {
+        font-size: 0.9rem;
+    }
+
+    #signatureContainer {
+        width: 100%;
+        height: 18vh;
+        margin-bottom: 10px;
+    }
+    
+
+    .h-button {
+        width: 40%;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 0.6rem;
+    }
 }
