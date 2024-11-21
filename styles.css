@@ -99,7 +99,7 @@ label {
 }
 
 canvas {
-    border: 2px dashed #ccc;
+    border: 2px dashed #007bff;
     width: 100%;
     height: 100%;
     border-radius: 8px;
@@ -140,10 +140,10 @@ button:active {
 /* Estilo específico para h-button */
 .h-button {
     position: relative;
-    background: #0da508;
+    background: #007bff;
     padding: 20px;
     text-align: center;
-    border: none;
+
 }
 
 .h-button span {
@@ -178,7 +178,7 @@ button:active {
 }
 
 .h-button:hover {
-    background: #0a8606;
+    background: #0061c9;
 }
 
 /* Estilo para el botón LIMPIAR FIRMA */
