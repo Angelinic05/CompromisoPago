@@ -129,20 +129,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 img2.src = 'Habeas.png'; // Cambia esta ruta por la segunda imagen
 
                 img2.onload = async () => {
-                    pdf.addImage(img2, 'PNG', 0, 0, 210, 297);
-                    pdf.setFontSize(12);
-                    pdf.text(` ${name}`, 76, 63.5);
-                    pdf.text(` ${email}`, 43.5, 257);
-                    pdf.text(` ${address}`, 67.5, 69);
-                    pdf.text(` ${idNumber}`, 29, 74);
-                    pdf.text(` ${country}`, 50, 25);
-                    pdf.text(` ${phoneNumber}`, 37, 250);
-                    pdf.text(` ${formattedDate}`, 145, 47); // Agregar la fecha al PDF
-        
+                    pdf2.addImage(img2, 'PNG', 0, 0, 210, 297);
+                    pdf2.setFontSize(12);
+                    pdf2.text(` ${name}`, 76, 63.5);
+                    pdf2.text(` ${email}`, 43.5, 257);
+                    pdf2.text(` ${address}`, 67.5, 69);
+                    pdf2.text(` ${idNumber}`, 29, 74);
+                    pdf2.text(` ${country}`, 50, 25);
+                    pdf2.text(` ${phoneNumber}`, 37, 250);
+                    pdf2.text(` ${formattedDate}`, 145, 47);
+
                     const signatureImage = canvas.toDataURL('image/jpeg', 0.5);
                     pdf.addImage(signatureImage, 'PNG', 25, 214, 50, 20);
-        
-                    const pdf2Base64 = pdf.output('datauristring').split(',')[1];
+
+                    const pdf2Base64 = pdf2.output('datauristring').split(',')[1];
 
                     // Enviar correo con dos PDFs adjuntos
                     await sendEmail2(email, pdf2Base64,);
