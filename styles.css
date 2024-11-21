@@ -109,11 +109,11 @@ canvas {
 
 /* Botones */
 button {
+    border: 3px solid #340068;
     background-color: #7F00FF;
     color: white;
     padding: 15px;
     border-radius: 8px;
-    border: none;
     font-size: 1.3rem;;
     cursor: pointer;
     transition: background-color 0.3s ease;
