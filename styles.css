@@ -207,6 +207,9 @@ button:active {
         font-size: 1rem;
         margin-bottom: 10px;
     }
+    hr{
+        margin-bottom: 3%;
+    }
 
     form {
         width: 70%;
